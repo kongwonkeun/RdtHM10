@@ -13,7 +13,10 @@ import com.rdt.bleservice.MyConfig.Companion.EXTRAS_DEVICE_NAME
 import com.rdt.bleservice.MyConfig.Companion.LIST_NAME
 import com.rdt.bleservice.MyConfig.Companion.LIST_UUID
 import com.rdt.bleservice.MyGATTAttributes.Companion.HM_RX_TX
+import kotlinx.android.synthetic.main.activity_gatt.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.xMessage
+import kotlinx.android.synthetic.main.activity_main.xNavView
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -33,17 +36,12 @@ class GATTActivity : AppCompatActivity() {
     private val mNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.xNavigationX -> {
-                //xMessage.setText(R.string.title_x)
-                mService!!.disconnect()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.xNavigationY -> {
-                //xMessage.setText(R.string.title_y)
-                mService!!.readCharacteristic(mCharacteristicRx!!)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.xNavigationZ -> {
-                //xMessage.setText(R.string.title_z)
                 sendData()
                 return@OnNavigationItemSelectedListener true
             }
@@ -128,8 +126,8 @@ class GATTActivity : AppCompatActivity() {
     }
 
     private fun sendData() {
-        val str = "test"
-        if (mConnected) {
+        val str = xCmd.text.toString()
+        if (mConnected && str.isNotEmpty()) {
             mCharacteristicTx!!.value = str.toByteArray()
             mService!!.writeCharacteristic(mCharacteristicTx!!)
             mService!!.setCharacteristicNotification(mCharacteristicRx!!, true)
